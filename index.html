@@ -96,7 +96,7 @@ const sign=box(1.6,1.8,.25,wood,5,1,-4);box(1.35,.9,.08,mat(0xe9d7a2),5,1.2,-3.8
 for(let i=0;i<28;i++){let x=(Math.random()-.5)*90,z=(Math.random()-.5)*90;if(Math.abs(x)<8&&Math.abs(z)<20)continue;const rr=.5+Math.random()*.7;ball(rr,stone,x,.35,z,scene,1.2,.7,.9);worldColliders.push({type:'circle',x,z,r:rr*.85})}
 // v1.3 character rebuild: a cohesive, expressive 3D meadow explorer
 const player=new THREE.Group();scene.add(player);
-const skin=mat(0xf0bd98),skinShade=mat(0xd99572),jacket=mat(0x287b79),jacketLight=mat(0x48a49a),pants=mat(0x34445f),pantsLight=mat(0x536783),red=mat(0xe45c43),redDark=mat(0xa93f35),cream=mat(0xffe9c9),dark=mat(0x27333a),leather=mat(0x855638),leatherLight=mat(0xb17b4b),gold=mat(0xf1c56c),hair=mat(0x603b2c),hairLight=mat(0x8a5638);
+const skin=mat(0xf0bd98),skinShade=mat(0xd99572),white=mat(0xffffff),jacket=mat(0x287b79),jacketLight=mat(0x48a49a),pants=mat(0x34445f),pantsLight=mat(0x536783),red=mat(0xe45c43),redDark=mat(0xa93f35),cream=mat(0xffe9c9),dark=mat(0x27333a),leather=mat(0x855638),leatherLight=mat(0xb17b4b),gold=mat(0xf1c56c),hair=mat(0x603b2c),hairLight=mat(0x8a5638);
 function capsule(radius,length,material,x,y,z,parent){const m=new THREE.Mesh(new THREE.CapsuleGeometry(radius,length,5,12),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
 function ellipsoid(radius,material,x,y,z,sx,sy,sz,parent){return ball(radius,material,x,y,z,parent,sx,sy,sz)}
 const rig=new THREE.Group();player.add(rig);
@@ -105,8 +105,8 @@ box(.58,.72,.3,leather,0,1.25,-.34,rig);box(.48,.48,.08,leatherLight,0,1.28,-.52
 box(.12,.78,.1,gold,-.25,1.28,-.18,rig);box(.12,.78,.1,gold,.25,1.28,-.18,rig);
 // legs with rounded boots and cuff details
 const legL=new THREE.Group(),legR=new THREE.Group();legL.position.set(-.2,.83,0);legR.position.set(.2,.83,0);rig.add(legL,legR);
-capsule(.145,.42,pants,0,-.25,0,legL);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legL);capsule(.15,.23,dark,0,-.62,.045,legL);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legL);box(.23,.055,gold,0,-.53,.19,legL);
-capsule(.145,.42,pants,0,-.25,0,legR);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legR);capsule(.15,.23,dark,0,-.62,.045,legR);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legR);box(.23,.055,gold,0,-.53,.19,legR);
+capsule(.145,.42,pants,0,-.25,0,legL);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legL);capsule(.15,.23,dark,0,-.62,.045,legL);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legL);box(.23,.055,.04,gold,0,-.53,.19,legL);
+capsule(.145,.42,pants,0,-.25,0,legR);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legR);capsule(.15,.23,dark,0,-.62,.045,legR);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legR);box(.23,.055,.04,gold,0,-.53,.19,legR);
 // torso, jacket panels, collar, scarf and utility belt
 capsule(.34,.48,jacket,0,1.22,0,rig);ellipsoid(.34,jacketLight,0,1.18,.13,.9,.85,.65,rig);
 box(.14,.55, .055,cream,-.12,1.23,.275,rig);box(.14,.55,.055,cream,.12,1.23,.275,rig);
@@ -120,7 +120,7 @@ ellipsoid(.19,hairLight,-.22,2.15,.19,1.1,.65,.8,rig);ellipsoid(.17,hairLight,.1
 for(let i=0;i<3;i++){const tuft= new THREE.Mesh(new THREE.ConeGeometry(.13,.3,8),hair);tuft.position.set(-.2+i*.2,2.34,-.02);tuft.rotation.z=-.35+i*.25;rig.add(tuft)}
 // expressive eyes, brows, nose and smile facing the camera's forward direction (+Z)
 for(const x of [-.145,.145]){ellipsoid(.075,cream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
-ellipsoid(.055,skinShade,0,1.84,.405,.8,.65,.55,rig);const smile=box(.105,.018,redDark,0,1.765,.39,rig);smile.rotation.z=0;
+ellipsoid(.055,skinShade,0,1.84,.405,.8,.65,.55,rig);const smile=box(.105,.018,.025,redDark,0,1.765,.39,rig);smile.rotation.z=0;
 ellipsoid(.09,skin,-.38,1.9,.02,.35,.65,.8,rig);ellipsoid(.09,skin,.38,1.9,.02,.35,.65,.8,rig);
 // signature explorer cap with curved crown, brim, stitched band and badge
 ellipsoid(.39,red,0,2.34,-.005,1.03,.43,.98,rig);ellipsoid(.4,redDark,0,2.27,.12,1.04,.16,.98,rig);ellipsoid(.43,red,0,2.25,.24,1.1,.12,.85,rig);
