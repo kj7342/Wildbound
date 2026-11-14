@@ -134,7 +134,7 @@ ellipsoid(.09,gold,.22,1.27,.31,1,1,.35,rig);ellipsoid(.045,redDark,.22,1.27,.34
 box(.25,.26,.16,leatherLight,-.48,.91,.05,rig);box(.16,.08,.08,gold,-.48,.91,.145,rig);
 player.position.set(0,0,12);
 // companion creature custom stylized fox
-const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22 ,explorerCream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38 ,explorerCream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
+const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22 ,cream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38 ,cream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
 // wild little creatures visible in meadow
 function wild(x,z,color,accent,name,emoji){
 const g=new THREE.Group();scene.add(g);const cm=mat(color),am=mat(accent),shine=mat(0xfff4d8),dark=mat(0x263039);
