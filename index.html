@@ -13,7 +13,17 @@
 <div id="hint">Explore the meadow · Find your first wild friend</div><div id="toast"></div>
 <div id="bottom"><div id="stick"><div id="nub"></div></div><div id="actions"><button class="act" id="jump">↟<small>JUMP</small></button><button class="act" id="interact">✧<small>INTERACT</small></button></div></div>
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+let THREE;
+try {
+  THREE = await import('https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js');
+} catch (primaryError) {
+  try {
+    THREE = await import('https://esm.sh/three@0.164.1');
+  } catch (fallbackError) {
+    document.querySelector('#game').innerHTML = '<div style="position:absolute;inset:0;display:grid;place-items:center;padding:28px;text-align:center;color:#f5e8c8;font:16px system-ui"><div><strong style="font-size:22px">The 3D world could not start</strong><p>Wildbound could not load its 3D engine. Check your connection, then reload this page.</p><button onclick="location.reload()" style="padding:12px 18px;border:0;border-radius:12px;background:#d9edcf;color:#183b35;font-weight:700">Reload Wildbound</button></div></div>';
+    throw fallbackError;
+  }
+}
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bd5dc);scene.fog=new THREE.Fog(0x9bd5dc,65,175);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);
 scene.add(new THREE.HemisphereLight(0xe7f8ff,0x59764b,2.0));const sun=new THREE.DirectionalLight(0xffedc4,2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);sun.shadow.camera.left=-65;sun.shadow.camera.right=65;sun.shadow.camera.top=65;sun.shadow.camera.bottom=-65;scene.add(sun);
