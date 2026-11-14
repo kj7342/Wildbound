@@ -8,7 +8,7 @@
 @media(min-width:800px){#stick{width:130px;height:130px}#nub{left:39px;top:39px}#hint{top:76px}#party{top:158px;width:330px}}
 #battle{display:none;position:absolute;z-index:8;inset:0;background:#071b19b8;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px)}#battle.open{display:flex}#battleCard{width:min(520px,94vw);max-height:88dvh;overflow:auto;background:linear-gradient(145deg,#183f36f5,#102923f5);border:1px solid #ffffff55;border-radius:22px;padding:18px;color:#f5f3dc;box-shadow:0 18px 60px #0009}#battleTitle{font-size:10px;letter-spacing:.18em;color:#f5d58a;font-weight:900}#battleEnemy{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px;background:#ffffff0c;border-radius:15px}#enemyEmoji{font-size:48px}#battleAlly{display:flex;align-items:center;gap:10px;padding:10px;background:#ffffff0c;border-radius:14px;margin:10px 0}#allyEmoji{font-size:34px}#battleText{font-size:13px;line-height:1.4;min-height:38px;color:#e4edda;margin:12px 0}#battleMoves{display:grid;grid-template-columns:1fr 1fr;gap:9px}#battleMoves button,#battleDone{border:1px solid #ffffff35;border-radius:12px;padding:12px;background:#28614d;color:white;font-weight:750;font-size:13px}#battleMoves button:disabled{opacity:.45}#battleDone{display:none;width:100%;margin-top:10px;background:#b77c39}#battle .bar{height:7px}#battle .bar i{transition:width .2s}body.in-battle #bottom,body.in-battle #menu{display:none}
 </style></head><body><div id="game"></div>
-<div id="top"><div class="panel"><div id="brand">WILDBOUND <span style="font-size:9px;color:#f4d58c;letter-spacing:.04em">v1.3.2</span></div><div id="zone">REALMS OF DISCOVERY · GREENHAVEN</div></div><div id="quest" class="panel"><b>✦ FIRST STEPS</b>Explore Greenhaven Meadow</div></div>
+<div id="top"><div class="panel"><div id="brand">WILDBOUND <span style="font-size:9px;color:#f4d58c;letter-spacing:.04em">v1.4.0</span></div><div id="zone">REALMS OF DISCOVERY · GREENHAVEN</div></div><div id="quest" class="panel"><b>✦ FIRST STEPS</b>Explore Greenhaven Meadow</div></div>
 <button id="teamToggle" aria-expanded="false" aria-controls="party">◉ TEAM <span id="teamCount">1/6</span> ▾</button><div id="party" aria-label="Your creature team"></div>
 <div id="menu"><button id="save">◈ SAVE GAME</button></div>
 <div id="hint">Explore the meadow · Walk close to a wild creature to encounter it</div><div id="toast"></div>
@@ -43,6 +43,7 @@
 })();
 </script>
 <script type="module">
+import * as THREE from './vendor/three.module.js';
 const gameRoot=document.querySelector('#game');
 const startup=document.createElement('div');
 startup.id='startup-debug';
@@ -55,17 +56,6 @@ function showStartupError(message){
 }
 window.addEventListener('error',e=>showStartupError(e.message||'Unknown JavaScript error'));
 window.addEventListener('unhandledrejection',e=>showStartupError(e.reason?.message||e.reason||'Module loading error'));
-let THREE;
-try {
-  THREE = await import('https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js');
-} catch (primaryError) {
-  try {
-    THREE = await import('https://esm.sh/three@0.164.1');
-  } catch (fallbackError) {
-    document.querySelector('#game').innerHTML = '<div style="position:absolute;inset:0;display:grid;place-items:center;padding:28px;text-align:center;color:#f5e8c8;font:16px system-ui"><div><strong style="font-size:22px">The 3D world could not start</strong><p>Wildbound could not load its 3D engine. Check your connection, then reload this page.</p><button onclick="location.reload()" style="padding:12px 18px;border:0;border-radius:12px;background:#d9edcf;color:#183b35;font-weight:700">Reload Wildbound</button></div></div>';
-    throw fallbackError;
-  }
-}
 const {CREATURE_SPAWNS,REGIONS}=await import('./src/world-data.js');document.querySelector('#zone').textContent=REGIONS.greenhaven.subtitle;
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bd5dc);scene.fog=new THREE.Fog(0x9bd5dc,65,175);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);renderer.domElement.style.touchAction='none';window.__wildboundReady=false;startup.style.display='block';startup.textContent='Building Greenhaven Meadow…';
