@@ -21510,7 +21510,7 @@ void main() {
     team[0].maxHp += 2;
     team[0].hp = Math.min(team[0].maxHp, team[0].hp + 5);
     renderTeam();
-    questEl.innerHTML = "<b>\u2726 FIRST STEPS</b>" + (team.length >= 6 ? "Build your team and explore" : "Find more wild friends");
+    if (questEl) questEl.innerHTML = "<b>\u2726 FIRST STEPS</b>" + (team.length >= 6 ? "Build your team and explore" : "Find more wild friends");
     document.querySelector("#battleMoves").style.display = "none";
     document.querySelector("#battleDone").style.display = "block";
     saveGame(false);
@@ -21711,7 +21711,7 @@ void main() {
     }
   }
   renderTeam();
-  questEl.innerHTML = "<b>\u2726 FIRST STEPS</b>" + (team.length > 1 ? "Find more wild friends" : "Explore Greenhaven Meadow");
+  if (questEl) questEl.innerHTML = "<b>\u2726 FIRST STEPS</b>" + (team.length > 1 ? "Find more wild friends" : "Explore Greenhaven Meadow");
   function animate() {
     requestAnimationFrame(animate);
     const dt = Math.min(clock.getDelta(), 0.04);
