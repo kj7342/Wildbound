@@ -8,7 +8,7 @@
 @media(min-width:800px){#stick{width:130px;height:130px}#nub{left:39px;top:39px}#hint{top:76px}#party{top:158px;width:330px}}
 #battle{display:none;position:absolute;z-index:8;inset:0;background:#071b19b8;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(5px)}#battle.open{display:flex}#battleCard{width:min(520px,94vw);max-height:88dvh;overflow:auto;background:linear-gradient(145deg,#183f36f5,#102923f5);border:1px solid #ffffff55;border-radius:22px;padding:18px;color:#f5f3dc;box-shadow:0 18px 60px #0009}#battleTitle{font-size:10px;letter-spacing:.18em;color:#f5d58a;font-weight:900}#battleEnemy{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px;background:#ffffff0c;border-radius:15px}#enemyEmoji{font-size:48px}#battleAlly{display:flex;align-items:center;gap:10px;padding:10px;background:#ffffff0c;border-radius:14px;margin:10px 0}#allyEmoji{font-size:34px}#battleText{font-size:13px;line-height:1.4;min-height:38px;color:#e4edda;margin:12px 0}#battleMoves{display:grid;grid-template-columns:1fr 1fr;gap:9px}#battleMoves button,#battleDone{border:1px solid #ffffff35;border-radius:12px;padding:12px;background:#28614d;color:white;font-weight:750;font-size:13px}#battleMoves button:disabled{opacity:.45}#battleDone{display:none;width:100%;margin-top:10px;background:#b77c39}#battle .bar{height:7px}#battle .bar i{transition:width .2s}body.in-battle #bottom,body.in-battle #menu{display:none}
 </style></head><body><div id="game"></div>
-<div id="top"><div class="panel"><div id="brand">WILDBOUND <span style="font-size:9px;color:#f4d58c;letter-spacing:.04em">v1.2</span></div><div id="zone">REALMS OF DISCOVERY · GREENHAVEN</div></div><div id="quest" class="panel"><b>✦ FIRST STEPS</b>Explore Greenhaven Meadow</div></div>
+<div id="top"><div class="panel"><div id="brand">WILDBOUND <span style="font-size:9px;color:#f4d58c;letter-spacing:.04em">v1.3</span></div><div id="zone">REALMS OF DISCOVERY · GREENHAVEN</div></div><div id="quest" class="panel"><b>✦ FIRST STEPS</b>Explore Greenhaven Meadow</div></div>
 <button id="teamToggle" aria-expanded="false" aria-controls="party">◉ TEAM <span id="teamCount">1/6</span> ▾</button><div id="party" aria-label="Your creature team"></div>
 <div id="menu"><button id="save">◈ SAVE GAME</button></div>
 <div id="hint">Explore the meadow · Walk close to a wild creature to encounter it</div><div id="toast"></div>
@@ -94,12 +94,45 @@ house(12,-22,1.35,0xb64d3e);house(25,-26,.95,0x477b91);house(31,-11,.9,0xd39b4f)
 const sign=box(1.6,1.8,.25,wood,5,1,-4);box(1.35,.9,.08,mat(0xe9d7a2),5,1.2,-3.84);
 // rocks
 for(let i=0;i<28;i++){let x=(Math.random()-.5)*90,z=(Math.random()-.5)*90;if(Math.abs(x)<8&&Math.abs(z)<20)continue;const rr=.5+Math.random()*.7;ball(rr,stone,x,.35,z,scene,1.2,.7,.9);worldColliders.push({type:'circle',x,z,r:rr*.85})}
-// Player model — layered explorer outfit with a readable silhouette
-const player=new THREE.Group();scene.add(player);const skin=mat(0xe8b58e),shirt=mat(0x397d79),pants=mat(0x34445f),red=mat(0xd94f43),white=mat(0xf5f0df),black=mat(0x283039),leather=mat(0x805536),gold=mat(0xe7bd62),hair=mat(0x49352c);
-ball(.34,skin,0,1.62,0,player,.88,1.08,.82);ball(.36,hair,0,1.83,-.04,player,1,.58,1);ball(.14,hair,-.28,1.65,.04,player,.55,.8,.7);ball(.14,hair,.28,1.65,.04,player,.55,.8,.7);
-ball(.4,red,0,2.02,0,player,1,.22,1);box(.86,.12,.56,white,0,1.96,.02,player);box(.68,.72,.43,shirt,0,.99,0,player);box(.74,.12,.48,leather,0,.65,0,player);box(.16,.18,.08,gold,0,.65,.27,player);
-box(.28,.66,.3,pants,-.2,.37,0,player);box(.28,.66,.3,pants,.2,.37,0,player);box(.22,.2,.42,black,-.2,.09,.08,player);box(.22,.2,.42,black,.2,.09,.08,player);
-const pack=box(.42,.55,.24,leather,0,1.08,-.31,player);box(.22,.2,.27,gold,0,1.18,-.46,player);box(.2,.62,.23,shirt,-.52,.99,0,player);box(.2,.62,.23,shirt,.52,.99,0,player);ball(.1,skin,-.52,.65,.02,player);ball(.1,skin,.52,.65,.02,player);player.position.set(0,0,12);
+// v1.3 character rebuild: a cohesive, expressive 3D meadow explorer
+const player=new THREE.Group();scene.add(player);
+const skin=mat(0xf0bd98),skinShade=mat(0xd99572),jacket=mat(0x287b79),jacketLight=mat(0x48a49a),pants=mat(0x34445f),pantsLight=mat(0x536783),red=mat(0xe45c43),redDark=mat(0xa93f35),cream=mat(0xffe9c9),dark=mat(0x27333a),leather=mat(0x855638),leatherLight=mat(0xb17b4b),gold=mat(0xf1c56c),hair=mat(0x603b2c),hairLight=mat(0x8a5638);
+function capsule(radius,length,material,x,y,z,parent){const m=new THREE.Mesh(new THREE.CapsuleGeometry(radius,length,5,12),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+function ellipsoid(radius,material,x,y,z,sx,sy,sz,parent){return ball(radius,material,x,y,z,parent,sx,sy,sz)}
+const rig=new THREE.Group();player.add(rig);
+// backpack silhouette first, with rolled bedroll and visible straps
+box(.58,.72,.3,leather,0,1.25,-.34,rig);box(.48,.48,.08,leatherLight,0,1.28,-.52,rig);box(.5,.12,.1,dark,0,1.02,-.53,rig);ball(.13,red,0,1.63,-.52,rig,.9,.9,.9);
+box(.12,.78,.1,gold,-.25,1.28,-.18,rig);box(.12,.78,.1,gold,.25,1.28,-.18,rig);
+// legs with rounded boots and cuff details
+const legL=new THREE.Group(),legR=new THREE.Group();legL.position.set(-.2,.83,0);legR.position.set(.2,.83,0);rig.add(legL,legR);
+capsule(.145,.42,pants,0,-.25,0,legL);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legL);capsule(.15,.23,dark,0,-.62,.045,legL);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legL);box(.23,.055,gold,0,-.53,.19,legL);
+capsule(.145,.42,pants,0,-.25,0,legR);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legR);capsule(.15,.23,dark,0,-.62,.045,legR);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legR);box(.23,.055,gold,0,-.53,.19,legR);
+// torso, jacket panels, collar, scarf and utility belt
+capsule(.34,.48,jacket,0,1.22,0,rig);ellipsoid(.34,jacketLight,0,1.18,.13,.9,.85,.65,rig);
+box(.14,.55, .055,cream,-.12,1.23,.275,rig);box(.14,.55,.055,cream,.12,1.23,.275,rig);
+box(.72,.12,.5,leather,0,.91,0,rig);box(.18,.19,.08,gold,0,.91,.28,rig);box(.2,.3,.14,leatherLight,.42,1.02,.02,rig);
+const scarf=ball(.25,gold,0,1.55,.02,rig,1.25,.42,1.05);box(.18,.38,.12,red,.2,1.45,-.12,rig).rotation.z=-.25;
+// neck and oversized friendly head
+capsule(.13,.16,skin,0,1.58,.02,rig);
+ellipsoid(.39,skin,0,1.91,.035,.94,1.08,.86,rig);
+ellipsoid(.405,hair,0,2.12,-.025,1.02,.56,.94,rig);
+ellipsoid(.19,hairLight,-.22,2.15,.19,1.1,.65,.8,rig);ellipsoid(.17,hairLight,.17,2.18,.17,1.05,.62,.8,rig);
+for(let i=0;i<3;i++){const tuft= new THREE.Mesh(new THREE.ConeGeometry(.13,.3,8),hair);tuft.position.set(-.2+i*.2,2.34,-.02);tuft.rotation.z=-.35+i*.25;rig.add(tuft)}
+// expressive eyes, brows, nose and smile facing the camera's forward direction (+Z)
+for(const x of [-.145,.145]){ellipsoid(.075,cream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
+ellipsoid(.055,skinShade,0,1.84,.405,.8,.65,.55,rig);const smile=box(.105,.018,redDark,0,1.765,.39,rig);smile.rotation.z=0;
+ellipsoid(.09,skin,-.38,1.9,.02,.35,.65,.8,rig);ellipsoid(.09,skin,.38,1.9,.02,.35,.65,.8,rig);
+// signature explorer cap with curved crown, brim, stitched band and badge
+ellipsoid(.39,red,0,2.34,-.005,1.03,.43,.98,rig);ellipsoid(.4,redDark,0,2.27,.12,1.04,.16,.98,rig);ellipsoid(.43,red,0,2.25,.24,1.1,.12,.85,rig);
+ellipsoid(.13,gold,0,2.35,.36,.7,.75,.3,rig);ellipsoid(.055,cream,0,2.35,.405,1,1,.4,rig);
+// articulated arms with shoulder caps, sleeves, cuffs and hands
+const armL=new THREE.Group(),armR=new THREE.Group();armL.position.set(-.39,1.43,0);armR.position.set(.39,1.43,0);rig.add(armL,armR);
+for(const [arm,side] of [[armL,-1],[armR,1]]){ellipsoid(.2,jacketLight,0,-.08,0,1,.95,1,arm);capsule(.145,.36,jacket,0,-.34,0,arm);capsule(.12,.12,cream,0,-.57,.015,arm);ellipsoid(.125,skin,0,-.7,.04,1,.95,.9,arm);ellipsoid(.055,skinShade,0,-.78,.11,1,1,.7,arm)}
+// shoulder piping, chest compass and a little side satchel
+ellipsoid(.07,gold,-.34,1.42,.15,1,.65,.55,rig);ellipsoid(.07,gold,.34,1.42,.15,1,.65,.55,rig);
+ellipsoid(.09,gold,.22,1.27,.31,1,1,.35,rig);ellipsoid(.045,redDark,.22,1.27,.345,1,1,.3,rig);
+box(.25,.26,.16,leatherLight,-.48,.91,.05,rig);box(.16,.08,.08,gold,-.48,.91,.145,rig);
+player.position.set(0,0,12);
 // companion creature custom stylized fox
 const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22,cream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38,cream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
 // wild little creatures visible in meadow
@@ -143,7 +176,7 @@ const stick=document.querySelector('#stick'),nub=document.querySelector('#nub');
 addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' '){e.preventDefault();document.querySelector('#jump').click()}});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 let dragging=false,lastX=0;renderer.domElement.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){dragging=true;lastX=e.clientX}});addEventListener('pointerup',()=>dragging=false);addEventListener('pointermove',e=>{if(dragging){camYaw-=(e.clientX-lastX)*.005;lastX=e.clientX}});
 const saved=localStorage.getItem('wildbound-save');if(saved){try{const s=JSON.parse(saved);player.position.set(Number.isFinite(s.x)?s.x:0,0,Number.isFinite(s.z)?s.z:12);if(Array.isArray(s.team)&&s.team.length){team.splice(0,team.length,...s.team.slice(0,6))}if(Array.isArray(s.reserve))reserve.push(...s.reserve);if(Array.isArray(s.caught)){for(const w of wilds){if(s.caught.includes(w.userData.name)){w.userData.recruited=true;w.visible=false}}}}catch{}}renderTeam();questEl.innerHTML='<b>✦ FIRST STEPS</b>'+(team.length>1?'Find more wild friends':'Explore Greenhaven Meadow');
-function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);const forward=-(move.y||((keys.w||keys.arrowup)?1:0)-((keys.s||keys.arrowdown)?1:0));const side=(move.x||((keys.d||keys.arrowright)?1:0)-((keys.a||keys.arrowleft)?1:0));const mag=Math.hypot(forward,side);if(!battle&&mag>.05){const dx=(side*Math.cos(camYaw)+forward*Math.sin(camYaw))/Math.max(1,mag),dz=(side*Math.sin(camYaw)-forward*Math.cos(camYaw))/Math.max(1,mag);const nx=player.position.x+dx*7*dt,nz=player.position.z+dz*7*dt;if(!blocked(nx,player.position.z))player.position.x=nx;if(!blocked(player.position.x,nz))player.position.z=nz;if(Math.abs(dx)+Math.abs(dz)>.01)player.rotation.y=Math.atan2(dx,dz);walk+=dt*10;player.position.y=Math.abs(Math.sin(walk))*.045; }else if(!battle)player.position.y=0;
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);const forward=-(move.y||((keys.w||keys.arrowup)?1:0)-((keys.s||keys.arrowdown)?1:0));const side=(move.x||((keys.d||keys.arrowright)?1:0)-((keys.a||keys.arrowleft)?1:0));const mag=Math.hypot(forward,side);if(!battle&&mag>.05){const dx=(side*Math.cos(camYaw)+forward*Math.sin(camYaw))/Math.max(1,mag),dz=(side*Math.sin(camYaw)-forward*Math.cos(camYaw))/Math.max(1,mag);const nx=player.position.x+dx*7*dt,nz=player.position.z+dz*7*dt;if(!blocked(nx,player.position.z))player.position.x=nx;if(!blocked(player.position.x,nz))player.position.z=nz;if(Math.abs(dx)+Math.abs(dz)>.01)player.rotation.y=Math.atan2(dx,dz);walk+=dt*10;player.position.y=Math.abs(Math.sin(walk))*.045;legL.rotation.x=Math.sin(walk)*.62;legR.rotation.x=-Math.sin(walk)*.62;armL.rotation.x=-Math.sin(walk)*.48;armR.rotation.x=Math.sin(walk)*.48;rig.rotation.z=Math.sin(walk*.5)*.025; }else if(!battle){player.position.y=0;legL.rotation.x*=.78;legR.rotation.x*=.78;armL.rotation.x*=.78;armR.rotation.x*=.78;rig.rotation.z*=.78;}
 if(player.position.y>0){}if(jumping>0)jumping-=dt;if(velY!==0||player.position.y>.1){player.position.y+=velY*dt;velY-=19*dt;if(player.position.y<0){player.position.y=0;velY=0}}
 const target=player.position.clone().add(new THREE.Vector3(-Math.sin(camYaw)*13,10,Math.cos(camYaw)*13));camera.position.lerp(target,.08);camera.lookAt(player.position.x,1.1,player.position.z);
 const bpos=player.position.clone().add(new THREE.Vector3(-Math.sin(player.rotation.y+.7)*1.5,0,-Math.cos(player.rotation.y+.7)*1.5));buddy.position.lerp(bpos,.09);buddy.position.y=.05+Math.sin(clock.elapsedTime*3)*.07;buddy.rotation.y=player.rotation.y;
