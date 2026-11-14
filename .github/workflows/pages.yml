@@ -21,13 +21,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Bundle Three.js locally
+      - name: Build standalone game script
         run: |
-          npm pack three@0.164.1
-          mkdir -p vendor
-          tar -xzf three-0.164.1.tgz package/build/three.module.js
-          cp package/build/three.module.js vendor/three.module.js
-          rm -rf package three-0.164.1.tgz
+          npm install --no-save esbuild@0.21.5 three@0.164.1
+          mkdir -p dist
+          ./node_modules/.bin/esbuild src/game.js --bundle --format=iife --target=es2020 --outfile=dist/game.js
+          rm -rf node_modules package-lock.json package.json
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
