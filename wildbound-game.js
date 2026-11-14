@@ -21028,7 +21028,8 @@ void main() {
   }
   window.addEventListener("error", (e) => showStartupError(e.message || "Unknown JavaScript error"));
   window.addEventListener("unhandledrejection", (e) => showStartupError(e.reason?.message || e.reason || "Module loading error"));
-  document.querySelector("#zone").textContent = REGIONS.greenhaven.subtitle;
+  var zoneLabel = document.querySelector("#zone");
+  if (zoneLabel) zoneLabel.textContent = REGIONS.greenhaven.subtitle;
   var root = document.querySelector("#game");
   var scene = new Scene();
   scene.background = new Color(10212828);
