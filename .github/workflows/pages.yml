@@ -4,7 +4,7 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -29,6 +29,15 @@ jobs:
           echo "Built game bundle:"
           ls -lh wildbound-game.js
           rm -rf node_modules package-lock.json package.json
+      - name: Publish standalone game script to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add wildbound-game.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish built game script"
+            git push
+          fi
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
