@@ -83,24 +83,43 @@ for(let i=0;i<8;i++){const rock=ball(.8,stone,-35+Math.sin(i*2)*4,.35,-31+i*4,sc
 // distant hills
 for(let i=0;i<15;i++){const h=ball(12+i%4*2,mat(i%2?0x79b77b:0x8bc18a),-85+i*12,-2,-82-Math.random()*18,scene,1,.7,.8)}
 function tree(x,z,s=1){const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.22*s,.34*s,2.5*s,7),wood);trunk.position.y=1.25*s;trunk.castShadow=true;g.add(trunk);for(let j=0;j<3;j++){const crown=new THREE.Mesh(new THREE.IcosahedronGeometry((1.35-j*.12)*s,1),leafM[(Math.random()*3)|0]);crown.position.set((Math.random()-.5)*.45*s,(2.5+j*.72)*s,(Math.random()-.5)*.4*s);crown.castShadow=true;crown.receiveShadow=true;g.add(crown)}return g}
-for(let i=0;i<105;i++){let a=Math.random()*Math.PI*2,r=18+Math.random()*66,x=Math.cos(a)*r,z=Math.sin(a)*r;if(Math.abs(x)<7&&z>-28&&z<28)continue;if(x<-23&&z>-43&&z<-2)continue;tree(x,z,.72+Math.random()*.65)}
+const worldColliders=[];for(let i=0;i<105;i++){let a=Math.random()*Math.PI*2,r=18+Math.random()*66,x=Math.cos(a)*r,z=Math.sin(a)*r;if(Math.abs(x)<7&&z>-28&&z<28)continue;if(x<-23&&z>-43&&z<-2)continue;const sc=.72+Math.random()*.65;tree(x,z,sc);worldColliders.push({type:'circle',x,z,r:.72*sc})}
 // flowers and shrubs
 for(let i=0;i<190;i++){let x=(Math.random()-.5)*105,z=(Math.random()-.5)*105;if(Math.abs(x)<5&&Math.abs(z)<24)continue;const stem=ball(.11,mat([0xf3d66e,0xf2a9c6,0xe8efff][i%3]),x,.22,z,scene,.7,.7,.7);}
 // village houses
 function house(x,z,scale=1,roof=0xb75c45){const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);box(7*scale,4.6*scale,6*scale,mat(0xf1d8ad),0,2.3*scale,0,g);const r=new THREE.Mesh(new THREE.ConeGeometry(5.2*scale,2.8*scale,4),mat(roof));r.rotation.y=Math.PI/4;r.position.y=5.8*scale;r.castShadow=true;g.add(r);box(1.25*scale,2.3*scale,.18,mat(0x684632),0,1.15*scale,3.08*scale,g);for(let xx of [-2,2]){box(1.15*scale,1.2*scale,.2,mat(0x7ec9d4),xx*scale,2.8*scale,3.1*scale,g);box(1.35*scale,.12*scale,.25,mat(0xffffff),xx*scale,2.8*scale,3.2*scale,g)}return g}
-house(12,-22,1.35,0xb64d3e);house(25,-26,.95,0x477b91);house(31,-11,.9,0xd39b4f);house(-13,29,1.1,0x6c8b56);
+house(12,-22,1.35,0xb64d3e);house(25,-26,.95,0x477b91);house(31,-11,.9,0xd39b4f);house(-13,29,1.1,0x6c8b56);worldColliders.push({type:'rect',x:12,z:-22,w:10.5,d:9.5},{type:'rect',x:25,z:-26,w:8,d:8},{type:'rect',x:31,z:-11,w:8,d:8},{type:'rect',x:-13,z:29,w:9,d:9});
 const sign=box(1.6,1.8,.25,wood,5,1,-4);box(1.35,.9,.08,mat(0xe9d7a2),5,1.2,-3.84);
 // rocks
-for(let i=0;i<28;i++){let x=(Math.random()-.5)*90,z=(Math.random()-.5)*90;if(Math.abs(x)<8&&Math.abs(z)<20)continue;ball(.5+Math.random()*.7,stone,x,.35,z,scene,1.2,.7,.9)}
+for(let i=0;i<28;i++){let x=(Math.random()-.5)*90,z=(Math.random()-.5)*90;if(Math.abs(x)<8&&Math.abs(z)<20)continue;const rr=.5+Math.random()*.7;ball(rr,stone,x,.35,z,scene,1.2,.7,.9);worldColliders.push({type:'circle',x,z,r:rr*.85})}
 // Player model
 const player=new THREE.Group();scene.add(player);const skin=mat(0xf1bc91),shirt=mat(0x3e79bd),pants=mat(0x34445f),red=mat(0xd94f43),white=mat(0xf5f0df),black=mat(0x283039);
 ball(.36,skin,0,1.55,0,player, .86,1.1,.8);ball(.39,red,0,1.94,0,player,1,.35,1);box(.82,.12,.52,white,0,1.88,.05,player);box(.66,.65,.42,shirt,0,.92,0,player);box(.25,.65,.28,pants,-.2,.36,0,player);box(.25,.65,.28,pants,.2,.36,0,player);box(.18,.18,.4,black,-.2,.08,.07,player);box(.18,.18,.4,black,.2,.08,.07,player);box(.22,.55,.22,skin,-.53,.96,0,player);box(.22,.55,.22,skin,.53,.96,0,player);player.position.set(0,0,12);
 // companion creature custom stylized fox
 const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22,cream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38,cream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
 // wild little creatures visible in meadow
-function wild(x,z,color,accent,name,emoji){const g=new THREE.Group();scene.add(g);const cm=mat(color),am=mat(accent);ball(.52,cm,0,.5,0,g,1.2,.9,1);ball(.32,cm,0,.98,.1,g,1,1,1);ball(.12,am,0,.95,.38,g,1,1,.5);ball(.11,black,-.16,1.03,.35,g,.5,.7,.5);ball(.11,black,.16,1.03,.35,g,.5,.7,.5);g.position.set(x,0,z);g.userData={name,emoji,recruited:false};return g}
-const wilds=[wild(-12,4,0x8e76c8,0xd9c7ff,'Mossling','🌿'),wild(17,12,0x63b8c7,0xf3e49b,'Tidepup','💧'),wild(-22,-3,0x91ad62,0xf2d88a,'Bramblet','🍃')];
+function wild(x,z,color,accent,name,emoji){
+const g=new THREE.Group();scene.add(g);const cm=mat(color),am=mat(accent);
+ball(.68,cm,0,.62,0,g,1.2,.9,1);ball(.4,cm,0,1.2,.1,g,1,1,1);ball(.16,am,0,1.16,.48,g,1,1,.5);
+ball(.13,black,-.2,1.27,.43,g,.5,.7,.5);ball(.13,black,.2,1.27,.43,g,.5,.7,.5);
+ball(.2,cm,-.28,1.55,.05,g,.55,1,.55);ball(.2,cm,.28,1.55,.05,g,.55,1,.55);
+g.position.set(x,0,z);g.userData={name,emoji,recruited:false,homeX:x,homeZ:z,phase:Math.random()*6};
+const canvas=document.createElement('canvas');canvas.width=256;canvas.height=64;const ctx=canvas.getContext('2d');
+ctx.fillStyle='rgba(12,38,31,.88)';ctx.beginPath();ctx.roundRect(5,5,246,54,20);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=3;ctx.stroke();
+ctx.fillStyle='#fff5d9';ctx.font='bold 27px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(emoji+'  '+name,128,33);
+const tex=new THREE.CanvasTexture(canvas);const label=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));
+label.scale.set(3.4,.85,1);label.position.y=2.55;g.add(label);return g;
+}
+const wilds=[
+wild(-3,6,0x9d65e8,0xe8d4ff,'Mossling','🌿'),
+wild(4,3,0x36b8d2,0xffe48c,'Tidepup','💧'),
+wild(-7,-1,0x91bd42,0xf2d88a,'Bramblet','🍃'),
+wild(9,-8,0xe28a43,0xffe0a3,'Cindercub','🔥'),
+wild(-15,14,0xe16b94,0xffd2e2,'Petalyn','🌸'),
+wild(18,5,0x8d9be8,0xe1e7ff,'Cloudlet','☁️')
+];
 let move={x:0,y:0},keys={},yaw=0,camYaw=0,jumping=0,velY=0,walk=0,near=null;const clock=new THREE.Clock();
+function blocked(x,z){if(Math.abs(x)>99||Math.abs(z)>99)return true;for(const c of worldColliders){if(c.type==='circle'&&Math.hypot(x-c.x,z-c.z)<c.r+.48)return true;if(c.type==='rect'&&Math.abs(x-c.x)<c.w/2+.45&&Math.abs(z-c.z)<c.d/2+.45)return true;}if(Math.hypot((x+29)/1.25,z+21)<13.6)return true;return false;}
 function toast(t){const e=document.querySelector('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.classList.remove('show'),1900)}
 const team=[{name:'Emberkit',emoji:'🦊',level:5,hp:24,maxHp:24}];
 const reserve=[];let battle=null,battleBusy=false;
@@ -116,14 +135,14 @@ function takeTurn(kind){if(!battle||battleBusy)return;const c=team[0],e=battle.w
 document.querySelectorAll('[data-move]').forEach(b=>b.addEventListener('click',()=>takeTurn(b.dataset.move)));document.querySelector('#battleDone').onclick=()=>endBattle();document.querySelector('#jump').onclick=()=>{if(player.position.y<.03){velY=7.2;toast('Whee!')}};
 document.querySelector('#save').onclick=()=>saveGame(true);
 const stick=document.querySelector('#stick'),nub=document.querySelector('#nub');let active=false;stick.addEventListener('contextmenu',e=>e.preventDefault());stick.addEventListener('pointerdown',e=>{e.preventDefault()});function stickMove(e){e.preventDefault();const r=stick.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,len=Math.hypot(dx,dy),k=Math.min(1,len/40);move.x=dx/(len||1)*k;move.y=dy/(len||1)*k;nub.style.transform='translate('+move.x*34+'px,'+move.y*34+'px)'}stick.addEventListener('pointerdown',e=>{active=true;stick.setPointerCapture(e.pointerId);stickMove(e)});stick.addEventListener('pointermove',e=>{if(active)stickMove(e)});function release(){active=false;move={x:0,y:0};nub.style.transform=''}stick.addEventListener('pointerup',release);stick.addEventListener('pointercancel',release);stick.addEventListener('lostpointercapture',release);document.addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault()},{passive:false});document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
-addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' '){e.preventDefault();document.querySelector('#jump').click()}if(e.key.toLowerCase()==='e')interact()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' '){e.preventDefault();document.querySelector('#jump').click()}});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 let dragging=false,lastX=0;renderer.domElement.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'){dragging=true;lastX=e.clientX}});addEventListener('pointerup',()=>dragging=false);addEventListener('pointermove',e=>{if(dragging){camYaw-=(e.clientX-lastX)*.005;lastX=e.clientX}});
 const saved=localStorage.getItem('wildbound-save');if(saved){try{const s=JSON.parse(saved);player.position.set(Number.isFinite(s.x)?s.x:0,0,Number.isFinite(s.z)?s.z:12);if(Array.isArray(s.team)&&s.team.length){team.splice(0,team.length,...s.team.slice(0,6))}if(Array.isArray(s.reserve))reserve.push(...s.reserve);if(Array.isArray(s.caught)){for(const w of wilds){if(s.caught.includes(w.userData.name)){w.userData.recruited=true;w.visible=false}}}}catch{}}renderTeam();questEl.innerHTML='<b>✦ FIRST STEPS</b>'+(team.length>1?'Find more wild friends':'Explore Greenhaven Meadow');
-function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);const forward=-(move.y||((keys.w||keys.arrowup)?1:0)-((keys.s||keys.arrowdown)?1:0));const side=(move.x||((keys.d||keys.arrowright)?1:0)-((keys.a||keys.arrowleft)?1:0));const mag=Math.hypot(forward,side);if(!battle&&mag>.05){const dx=(side*Math.cos(camYaw)+forward*Math.sin(camYaw))/Math.max(1,mag),dz=(side*Math.sin(camYaw)-forward*Math.cos(camYaw))/Math.max(1,mag);player.position.x+=dx*8*dt;player.position.z+=dz*8*dt;player.rotation.y=Math.atan2(dx,dz);walk+=dt*10;player.position.y=Math.abs(Math.sin(walk))*.055; }else player.position.y=0;
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);const forward=-(move.y||((keys.w||keys.arrowup)?1:0)-((keys.s||keys.arrowdown)?1:0));const side=(move.x||((keys.d||keys.arrowright)?1:0)-((keys.a||keys.arrowleft)?1:0));const mag=Math.hypot(forward,side);if(!battle&&mag>.05){const dx=(side*Math.cos(camYaw)+forward*Math.sin(camYaw))/Math.max(1,mag),dz=(side*Math.sin(camYaw)-forward*Math.cos(camYaw))/Math.max(1,mag);const nx=player.position.x+dx*7*dt,nz=player.position.z+dz*7*dt;if(!blocked(nx,player.position.z))player.position.x=nx;if(!blocked(player.position.x,nz))player.position.z=nz;if(Math.abs(dx)+Math.abs(dz)>.01)player.rotation.y=Math.atan2(dx,dz);walk+=dt*10;player.position.y=Math.abs(Math.sin(walk))*.045; }else if(!battle)player.position.y=0;
 if(player.position.y>0){}if(jumping>0)jumping-=dt;if(velY!==0||player.position.y>.1){player.position.y+=velY*dt;velY-=19*dt;if(player.position.y<0){player.position.y=0;velY=0}}
 const target=player.position.clone().add(new THREE.Vector3(-Math.sin(camYaw)*13,10,Math.cos(camYaw)*13));camera.position.lerp(target,.08);camera.lookAt(player.position.x,1.1,player.position.z);
 const bpos=player.position.clone().add(new THREE.Vector3(-Math.sin(player.rotation.y+.7)*1.5,0,-Math.cos(player.rotation.y+.7)*1.5));buddy.position.lerp(bpos,.09);buddy.position.y=.05+Math.sin(clock.elapsedTime*3)*.07;buddy.rotation.y=player.rotation.y;
-for(const w of wilds){if(!w.userData.recruited){w.rotation.y+=dt*.2;w.position.y=.04+Math.sin(clock.elapsedTime*2+w.position.x)*.045}}
+for(const w of wilds){if(!w.userData.recruited){w.rotation.y+=dt*.25;w.position.y=.04+Math.sin(clock.elapsedTime*2+w.userData.phase)*.06;const t=clock.elapsedTime*.22+w.userData.phase,tx=w.userData.homeX+Math.sin(t)*1.15,tz=w.userData.homeZ+Math.cos(t*.8)*1.15;w.position.x+=(tx-w.position.x)*.012;w.position.z+=(tz-w.position.z)*.012;}}
 const nearby=nearestWild();hintEl.textContent=battle?'Battle in progress':nearby?'A wild '+nearby.userData.name+' is nearby — encounter starting!':'Explore the meadow · Walk close to a wild creature to encounter it';if(nearby&&!battle)startBattle(nearby);
 water.color.setHSL(.52,.48,.49+Math.sin(clock.elapsedTime*1.2)*.025);renderer.render(scene,camera)}
 animate();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight)});
