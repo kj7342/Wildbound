@@ -11,7 +11,7 @@ function showStartupError(message){
 }
 window.addEventListener('error',e=>showStartupError(e.message||'Unknown JavaScript error'));
 window.addEventListener('unhandledrejection',e=>showStartupError(e.reason?.message||e.reason||'Module loading error'));
-import { CREATURE_SPAWNS, REGIONS } from './world-data.js';document.querySelector('#zone').textContent=REGIONS.greenhaven.subtitle;
+import { CREATURE_SPAWNS, REGIONS } from './world-data.js';const zoneLabel=document.querySelector('#zone');if(zoneLabel)zoneLabel.textContent=REGIONS.greenhaven.subtitle;
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bd5dc);scene.fog=new THREE.Fog(0x9bd5dc,65,175);
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);renderer.domElement.style.touchAction='none';window.__wildboundReady=false;startup.style.display='block';startup.textContent='Building Greenhaven Meadow…';
 scene.add(new THREE.HemisphereLight(0xe7f8ff,0x59764b,2.0));const sun=new THREE.DirectionalLight(0xffedc4,2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-65;sun.shadow.camera.right=65;sun.shadow.camera.top=65;sun.shadow.camera.bottom=-65;scene.add(sun);
