@@ -12,6 +12,34 @@
 <div id="menu"><button id="save">◈ SAVE GAME</button></div>
 <div id="hint">Explore the meadow · Find your first wild friend</div><div id="toast"></div>
 <div id="bottom"><div id="stick"><div id="nub"></div></div><div id="actions"><button class="act" id="jump">↟<small>JUMP</small></button><button class="act" id="interact">✧<small>INTERACT</small></button></div></div>
+<script>
+(function(){
+  var root=document.getElementById('game');
+  var panel=document.createElement('div');
+  panel.id='wildbound-startup-status';
+  panel.style.cssText='position:absolute;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%);width:min(88%,420px);padding:16px 18px;border-radius:14px;background:#102b26ed;border:1px solid #ffffff66;color:#fff3d6;font:14px/1.5 system-ui;text-align:center;box-shadow:0 8px 30px #0008';
+  panel.textContent='Starting Wildbound 3D engine…';
+  root.appendChild(panel);
+  window.__wildboundStatus=function(message,isError){
+    panel.style.display='block';
+    panel.style.color=isError?'#ffd0c8':'#fff3d6';
+    panel.textContent=message;
+  };
+  window.__wildboundReady=false;
+  window.addEventListener('error',function(e){
+    window.__wildboundStatus('Startup error: '+(e.message||'JavaScript failed to load')+'. Please tell ChatGPT this exact message.',true);
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    var reason=e.reason&&e.reason.message?e.reason.message:String(e.reason||'unknown error');
+    window.__wildboundStatus('3D engine error: '+reason+'. Please tell ChatGPT this exact message.',true);
+  });
+  setTimeout(function(){
+    if(!window.__wildboundReady){
+      window.__wildboundStatus('The page loaded, but the 3D game script never finished starting. Try opening this link directly in Safari instead of the in-app browser.',true);
+    }
+  },12000);
+})();
+</script>
 <script type="module">
 const gameRoot=document.querySelector('#game');
 const startup=document.createElement('div');
@@ -37,7 +65,7 @@ try {
   }
 }
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bd5dc);scene.fog=new THREE.Fog(0x9bd5dc,65,175);
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);startup.remove();
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);window.__wildboundReady=true;document.getElementById('wildbound-startup-status')?.remove();
 scene.add(new THREE.HemisphereLight(0xe7f8ff,0x59764b,2.0));const sun=new THREE.DirectionalLight(0xffedc4,2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);sun.shadow.camera.left=-65;sun.shadow.camera.right=65;sun.shadow.camera.top=65;sun.shadow.camera.bottom=-65;scene.add(sun);
 const mat=(c,r=.9)=>new THREE.MeshStandardMaterial({color:c,roughness:r});const grass=mat(0x68a94d),pathmat=mat(0xc9a875),darkgrass=mat(0x4b873f),wood=mat(0x815338),leafM=[mat(0x367f4d),mat(0x4c9954),mat(0x70ae59)],stone=mat(0x87928a),water= new THREE.MeshStandardMaterial({color:0x4caec1,roughness:.23,metalness:.12});
 function box(w,h,d,m,x,y,z,group=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;group.add(o);return o}
