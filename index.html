@@ -119,7 +119,7 @@ ellipsoid(.405,hair,0,2.12,-.025,1.02,.56,.94,rig);
 ellipsoid(.19,hairLight,-.22,2.15,.19,1.1,.65,.8,rig);ellipsoid(.17,hairLight,.17,2.18,.17,1.05,.62,.8,rig);
 for(let i=0;i<3;i++){const tuft= new THREE.Mesh(new THREE.ConeGeometry(.13,.3,8),hair);tuft.position.set(-.2+i*.2,2.34,-.02);tuft.rotation.z=-.35+i*.25;rig.add(tuft)}
 // expressive eyes, brows, nose and smile facing the camera's forward direction (+Z)
-for(const x of [-.145,.145]){ellipsoid(.075 ,explorerCream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
+for(const x of [-.145,.145]){ellipsoid(.075 ,explorerCream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,.025,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
 ellipsoid(.055,skinShade,0,1.84,.405,.8,.65,.55,rig);const smile=box(.105,.018,.025,redDark,0,1.765,.39,rig);smile.rotation.z=0;
 ellipsoid(.09,skin,-.38,1.9,.02,.35,.65,.8,rig);ellipsoid(.09,skin,.38,1.9,.02,.35,.65,.8,rig);
 // signature explorer cap with curved crown, brim, stitched band and badge
