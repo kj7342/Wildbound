@@ -24,8 +24,10 @@ jobs:
       - name: Build standalone game script
         run: |
           npm install --no-save esbuild@0.21.5 three@0.164.1
-          mkdir -p dist
-          ./node_modules/.bin/esbuild src/game.js --bundle --format=iife --target=es2020 --outfile=dist/game.js
+          ./node_modules/.bin/esbuild src/game.js --bundle --format=iife --target=es2020 --outfile=wildbound-game.js
+          test -s wildbound-game.js
+          echo "Built game bundle:"
+          ls -lh wildbound-game.js
           rm -rf node_modules package-lock.json package.json
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
