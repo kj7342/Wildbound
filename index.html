@@ -112,6 +112,6 @@ if(player.position.y>0){}if(jumping>0)jumping-=dt;if(velY!==0||player.position.y
 const target=player.position.clone().add(new THREE.Vector3(-Math.sin(camYaw)*13,10,Math.cos(camYaw)*13));camera.position.lerp(target,.08);camera.lookAt(player.position.x,1.1,player.position.z);
 const bpos=player.position.clone().add(new THREE.Vector3(-Math.sin(player.rotation.y+.7)*1.5,0,-Math.cos(player.rotation.y+.7)*1.5));buddy.position.lerp(bpos,.09);buddy.position.y=.05+Math.sin(clock.elapsedTime*3)*.07;buddy.rotation.y=player.rotation.y;
 for(const w of wilds){w.rotation.y+=dt*.2;w.position.y=.04+Math.sin(clock.elapsedTime*2+w.position.x)*.045}
-water.material.color.setHSL(.52,.48,.49+Math.sin(clock.elapsedTime*1.2)*.025);renderer.render(scene,camera)}
+water.color.setHSL(.52,.48,.49+Math.sin(clock.elapsedTime*1.2)*.025);renderer.render(scene,camera)}
 animate();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight)});
 </script></body></html>
