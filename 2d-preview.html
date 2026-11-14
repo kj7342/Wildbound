@@ -74,20 +74,59 @@ function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundR
 function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();}
 function path(){ctx.fillStyle='#d8bd83';ctx.beginPath();ctx.moveTo(0,650);ctx.bezierCurveTo(270,610,300,700,520,660);ctx.bezierCurveTo(780,610,850,510,1060,555);ctx.bezierCurveTo(1240,595,1300,470,1500,420);ctx.lineTo(1500,500);ctx.bezierCurveTo(1310,560,1260,680,1050,635);ctx.bezierCurveTo(820,590,740,730,530,720);ctx.bezierCurveTo(300,760,250,675,0,720);ctx.closePath();ctx.fill();
 ctx.strokeStyle='#ead6a5';ctx.lineWidth=5;ctx.globalAlpha=.5;ctx.stroke();ctx.globalAlpha=1;}
-function drawTree(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ellipse(4,18,27,12,'#55764a');rounded(-7,-3,14,29,5,'#805b3b');ellipse(0,-12,28,27,'#356c49');ellipse(-14,-3,17,18,'#438456');ellipse(15,-5,17,18,'#4b905b');ellipse(-8,-22,14,13,'#5b9c62');ellipse(12,-20,13,13,'#3c7b4d');ellipse(-9,-16,4,3,'#78b875');ctx.restore();}
+function drawTree(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+ellipse(3,22,31,12,'#405f43');rounded(-9,-4,18,34,5,'#70472f');rounded(-5,-2,5,26,2,'#a16d43');
+ctx.lineWidth=3;ctx.strokeStyle='#244c38';ctx.fillStyle='#2f6948';ctx.beginPath();ctx.moveTo(-30,-9);ctx.bezierCurveTo(-38,-29,-20,-49,-3,-43);ctx.bezierCurveTo(8,-57,33,-43,31,-25);ctx.bezierCurveTo(45,-9,29,9,12,8);ctx.bezierCurveTo(-5,18,-31,8,-30,-9);ctx.closePath();ctx.fill();ctx.stroke();
+ellipse(-17,-17,16,18,'#438456');ellipse(5,-30,19,18,'#55965a');ellipse(21,-13,15,17,'#39794c');ellipse(-5,-10,18,15,'#4b8b54');
+ellipse(-17,-24,7,5,'#79b66c');ellipse(4,-38,8,5,'#80bd70');ellipse(18,-18,6,4,'#72ae66');
+ctx.restore();}
 function drawRock(x,y){ellipse(x,y+5,15,7,'#65806d');ellipse(x,y,13,9,'#9aab92');ellipse(x-4,y-3,5,3,'#c1c9a9');}
 function drawFlower(f){ellipse(f.x,f.y,2.4,2.4,f.c);ellipse(f.x+3,f.y-1,2.2,2.2,f.c);ellipse(f.x-2,f.y-3,2,2,f.c);ellipse(f.x,f.y,1.5,1.5,'#dcae58');}
-function drawCreature(c,t){const bob=Math.sin(t/330+c.x)*2;ctx.save();ctx.translate(c.x,c.y+bob);ellipse(0,13,23,8,'#36533d55');
-if(c.type==='moss'){ellipse(0,0,19,17,'#b6cf79');ellipse(-12,-11,7,13,'#6d9d61');ellipse(12,-11,7,13,'#6d9d61');ellipse(-12,-13,3,7,'#d7e5a4');ellipse(12,-13,3,7,'#d7e5a4');ellipse(-7,-2,2.4,3,'#263b32');ellipse(7,-2,2.4,3,'#263b32');ellipse(0,5,4,2,'#e98e83');ellipse(-4,-11,4,3,'#e8dca0');}
-else if(c.type==='ember'){ellipse(0,2,19,15,'#df9464');ellipse(-11,-12,6,12,'#b95f49');ellipse(11,-12,6,12,'#b95f49');ellipse(-11,-15,2.5,6,'#f4c28b');ellipse(11,-15,2.5,6,'#f4c28b');ellipse(-7,-2,2.5,3,'#332d2a');ellipse(7,-2,2.5,3,'#332d2a');ellipse(0,6,4,2,'#fff0c9');}
-else{ellipse(0,1,19,16,'#8fc8d0');ellipse(-11,-11,6,9,'#5a9fb2');ellipse(11,-11,6,9,'#5a9fb2');ellipse(-7,-3,2.5,3,'#25434c');ellipse(7,-3,2.5,3,'#25434c');ellipse(0,5,4,2,'#e7a6a0');ellipse(0,-18,5,5,'#b8e2d6');}
+function drawCreature(c,t){const bob=Math.sin(t/300+c.x)*2.5;ctx.save();ctx.translate(c.x,c.y+bob);
+ellipse(0,17,27,9,'#29493655');
+const outline=(x,y,rx,ry,fill)=>{ctx.fillStyle=fill;ctx.strokeStyle='#38513d';ctx.lineWidth=2.6;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.stroke();};
+if(c.type==='moss'){
+// round woodland hare with leafy ears and a tiny sprout
+outline(0,1,22,19,'#b6d879');outline(-13,-15,7,16,'#568d58');outline(13,-15,7,16,'#568d58');
+ellipse(-13,-18,3,9,'#b9d98a');ellipse(13,-18,3,9,'#b9d98a');
+ellipse(-8,-5,3,4,'#253b31');ellipse(8,-5,3,4,'#253b31');ellipse(-7,-6,1,1.5,'#fff4d6');ellipse(9,-6,1,1.5,'#fff4d6');
+ellipse(0,3,4,3,'#e58b83');ellipse(-4,8,4,2,'#f4e7c6');ellipse(4,8,4,2,'#f4e7c6');
+ellipse(-5,-18,5,3,'#e5d99b');ellipse(0,-23,4,5,'#73a95c');
+}else if(c.type==='ember'){
+// fox-like fire cub with swept ears and a flame tail
+ctx.strokeStyle='#8b4939';ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(15,7);ctx.quadraticCurveTo(31,2,29,-13);ctx.stroke();
+ctx.fillStyle='#f4c36f';ctx.beginPath();ctx.moveTo(28,-10);ctx.quadraticCurveTo(42,-26,31,-33);ctx.quadraticCurveTo(31,-21,21,-20);ctx.fill();
+outline(0,2,22,17,'#e49a69');outline(-13,-13,7,13,'#b95d49');outline(13,-13,7,13,'#b95d49');
+ellipse(-13,-17,3,6,'#f0bb83');ellipse(13,-17,3,6,'#f0bb83');
+ellipse(-8,-3,2.8,3.5,'#332c2a');ellipse(8,-3,2.8,3.5,'#332c2a');ellipse(-7,-4,1,1.3,'#fff0d4');ellipse(9,-4,1,1.3,'#fff0d4');
+ellipse(0,6,4,2,'#fff0c9');ellipse(-14,8,6,4,'#f3b17d');ellipse(14,8,6,4,'#f3b17d');
+}else{
+// water spirit with droplet crest and soft fin ears
+outline(0,2,21,18,'#8dcbd1');outline(-16,-9,7,10,'#579cad');outline(16,-9,7,10,'#579cad');
+ctx.fillStyle='#bce9e4';ctx.strokeStyle='#385f67';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-14);ctx.bezierCurveTo(-12,-27,-3,-35,1,-39);ctx.bezierCurveTo(11,-28,12,-21,0,-14);ctx.fill();ctx.stroke();
+ellipse(-8,-3,2.8,3.5,'#25434c');ellipse(8,-3,2.8,3.5,'#25434c');ellipse(-7,-4,1,1.3,'#fff');ellipse(9,-4,1,1.3,'#fff');
+ellipse(0,6,4,2,'#e7a6a0');ellipse(-12,7,4,2,'#c4e7dc');ellipse(12,7,4,2,'#c4e7dc');
+}
 ctx.restore();}
-function drawPlayer(t){ctx.save();ctx.translate(player.x,player.y+Math.sin(t/100)*((keys.up||keys.down||keys.left||keys.right)?1.5:0));ellipse(0,15,13,6,'#344b3c66');
-rounded(-10,-2,20,20,7,'#d7a66e');rounded(-9,-14,18,17,6,'#e8c49a');rounded(-10,-21,20,12,5,'#526b91');rounded(-9,-26,18,8,4,'#3d536f');ellipse(-4,-8,1.5,2,'#303b38');ellipse(4,-8,1.5,2,'#303b38');rounded(-8,14,7,5,2,'#6b5140');rounded(2,14,7,5,2,'#6b5140');ctx.restore();}
+function drawPlayer(t){const moving=keys.up||keys.down||keys.left||keys.right;const bob=moving?Math.sin(t/75)*2:Math.sin(t/500)*.7;ctx.save();ctx.translate(player.x,player.y+bob);
+ellipse(0,18,15,7,'#344b3c66');
+// little backpack and body
+rounded(7,-1,9,15,4,'#9a7047');rounded(7,1,5,10,2,'#c3945c');
+rounded(-10,1,20,19,6,'#d7a66e');rounded(-8,3,16,11,4,'#527b86');
+rounded(-9,-13,18,18,6,'#edc79d');ellipse(-8,-1,3,5,'#d7a66e');ellipse(8,-1,3,5,'#d7a66e');
+rounded(-11,-22,22,12,5,'#526b91');rounded(-10,-27,20,8,4,'#3d536f');rounded(-7,-20,14,3,2,'#d9b56e');
+ellipse(-4,-8,1.8,2.5,'#303b38');ellipse(4,-8,1.8,2.5,'#303b38');
+rounded(-9,16,7,6,2,'#6b5140');rounded(2,16,7,6,2,'#6b5140');
+ctx.restore();}
 function draw(){ctx.clearRect(0,0,W,H);const scale=Math.min(W/850,H/560);const viewW=W/scale,viewH=H/scale;camX=Math.max(0,Math.min(world.w-viewW,player.x-viewW/2));camY=Math.max(0,Math.min(world.h-viewH,player.y-viewH/2));ctx.save();ctx.scale(scale,scale);ctx.translate(-camX,-camY);
 ctx.fillStyle='#8fbd76';ctx.fillRect(0,0,world.w,world.h);
 ctx.fillStyle='#9bc783';for(let i=0;i<85;i++){let x=(i*173)%world.w,y=(i*251)%world.h;ellipse(x,y,32,15,'#9bc78355');}
-path();flowers.forEach(drawFlower);
+path();
+ // hand-placed tufts, tiny stones and dappled grass give the field a painted RPG-map feel
+ for(let i=0;i<230;i++){const x=(i*131+19)%world.w,y=(i*227+41)%world.h;ctx.strokeStyle=i%3?'#5f986055':'#d2e49a66';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y+3);ctx.lineTo(x-2,y-2);ctx.moveTo(x,y+3);ctx.lineTo(x+3,y-3);ctx.stroke();}
+ flowers.forEach(drawFlower);
+ // a little signpost beside the path
+ ctx.fillStyle='#755034';ctx.fillRect(1240,458,8,40);ctx.fillStyle='#b98951';ctx.strokeStyle='#68452f';ctx.lineWidth=2;ctx.fillRect(1218,455,54,20);ctx.strokeRect(1218,455,54,20);ctx.fillStyle='#f4dfad';ctx.font='bold 10px sans-serif';ctx.fillText('MEADOW',1224,469);
 ctx.fillStyle='#7eaa70';ctx.beginPath();ctx.ellipse(760,260,250,125,-.15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#9bc783';ctx.beginPath();ctx.ellipse(760,260,220,102,-.15,0,Math.PI*2);ctx.fill();
 rocks.forEach(r=>drawRock(r.x,r.y));
 trees.sort((a,b)=>a.y-b.y);let objects=trees.map(v=>({y:v.y,fn:()=>drawTree(v.x,v.y,v.s)}));creatures.forEach(c=>objects.push({y:c.y,fn:()=>drawCreature(c,performance.now())}));objects.push({y:player.y,fn:()=>drawPlayer(performance.now())});objects.sort((a,b)=>a.y-b.y);objects.forEach(o=>o.fn());
