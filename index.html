@@ -96,7 +96,7 @@ const sign=box(1.6,1.8,.25,wood,5,1,-4);box(1.35,.9,.08,mat(0xe9d7a2),5,1.2,-3.8
 for(let i=0;i<28;i++){let x=(Math.random()-.5)*90,z=(Math.random()-.5)*90;if(Math.abs(x)<8&&Math.abs(z)<20)continue;const rr=.5+Math.random()*.7;ball(rr,stone,x,.35,z,scene,1.2,.7,.9);worldColliders.push({type:'circle',x,z,r:rr*.85})}
 // v1.3 character rebuild: a cohesive, expressive 3D meadow explorer
 const player=new THREE.Group();scene.add(player);
-const skin=mat(0xf0bd98),skinShade=mat(0xd99572),white=mat(0xffffff),jacket=mat(0x287b79),jacketLight=mat(0x48a49a),pants=mat(0x34445f),pantsLight=mat(0x536783),red=mat(0xe45c43),redDark=mat(0xa93f35),cream=mat(0xffe9c9),dark=mat(0x27333a),leather=mat(0x855638),leatherLight=mat(0xb17b4b),gold=mat(0xf1c56c),hair=mat(0x603b2c),hairLight=mat(0x8a5638);
+const skin=mat(0xf0bd98),skinShade=mat(0xd99572),white=mat(0xffffff),jacket=mat(0x287b79),jacketLight=mat(0x48a49a),pants=mat(0x34445f),pantsLight=mat(0x536783),red=mat(0xe45c43),redDark=mat(0xa93f35),explorerCream=mat(0xffe9c9),dark=mat(0x27333a),leather=mat(0x855638),leatherLight=mat(0xb17b4b),gold=mat(0xf1c56c),hair=mat(0x603b2c),hairLight=mat(0x8a5638);
 function capsule(radius,length,material,x,y,z,parent){const m=new THREE.Mesh(new THREE.CapsuleGeometry(radius,length,5,12),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
 function ellipsoid(radius,material,x,y,z,sx,sy,sz,parent){return ball(radius,material,x,y,z,parent,sx,sy,sz)}
 const rig=new THREE.Group();player.add(rig);
@@ -109,7 +109,7 @@ capsule(.145,.42,pants,0,-.25,0,legL);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55
 capsule(.145,.42,pants,0,-.25,0,legR);ellipsoid(.16,pantsLight,0,-.08,.015,1,.55,1,legR);capsule(.15,.23,dark,0,-.62,.045,legR);ellipsoid(.17,leatherLight,0,-.72,.13,1,.62,1.45,legR);box(.23,.055,.04,gold,0,-.53,.19,legR);
 // torso, jacket panels, collar, scarf and utility belt
 capsule(.34,.48,jacket,0,1.22,0,rig);ellipsoid(.34,jacketLight,0,1.18,.13,.9,.85,.65,rig);
-box(.14,.55, .055,cream,-.12,1.23,.275,rig);box(.14,.55,.055,cream,.12,1.23,.275,rig);
+box(.14,.55, .055 ,explorerCream,-.12,1.23,.275,rig);box(.14,.55,.055 ,explorerCream,.12,1.23,.275,rig);
 box(.72,.12,.5,leather,0,.91,0,rig);box(.18,.19,.08,gold,0,.91,.28,rig);box(.2,.3,.14,leatherLight,.42,1.02,.02,rig);
 const scarf=ball(.25,gold,0,1.55,.02,rig,1.25,.42,1.05);box(.18,.38,.12,red,.2,1.45,-.12,rig).rotation.z=-.25;
 // neck and oversized friendly head
@@ -119,22 +119,22 @@ ellipsoid(.405,hair,0,2.12,-.025,1.02,.56,.94,rig);
 ellipsoid(.19,hairLight,-.22,2.15,.19,1.1,.65,.8,rig);ellipsoid(.17,hairLight,.17,2.18,.17,1.05,.62,.8,rig);
 for(let i=0;i<3;i++){const tuft= new THREE.Mesh(new THREE.ConeGeometry(.13,.3,8),hair);tuft.position.set(-.2+i*.2,2.34,-.02);tuft.rotation.z=-.35+i*.25;rig.add(tuft)}
 // expressive eyes, brows, nose and smile facing the camera's forward direction (+Z)
-for(const x of [-.145,.145]){ellipsoid(.075,cream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
+for(const x of [-.145,.145]){ellipsoid(.075 ,explorerCream,x,1.94,.365,.9,1.05,.45,rig);ellipsoid(.043,dark,x,1.94,.402,.9,1.05,.45,rig);ellipsoid(.018,white,x-.012,1.96,.422,1,1,1,rig);box(.13,.035,hair,x,2.055,.36,rig).rotation.z=x<0?-.12:.12}
 ellipsoid(.055,skinShade,0,1.84,.405,.8,.65,.55,rig);const smile=box(.105,.018,.025,redDark,0,1.765,.39,rig);smile.rotation.z=0;
 ellipsoid(.09,skin,-.38,1.9,.02,.35,.65,.8,rig);ellipsoid(.09,skin,.38,1.9,.02,.35,.65,.8,rig);
 // signature explorer cap with curved crown, brim, stitched band and badge
 ellipsoid(.39,red,0,2.34,-.005,1.03,.43,.98,rig);ellipsoid(.4,redDark,0,2.27,.12,1.04,.16,.98,rig);ellipsoid(.43,red,0,2.25,.24,1.1,.12,.85,rig);
-ellipsoid(.13,gold,0,2.35,.36,.7,.75,.3,rig);ellipsoid(.055,cream,0,2.35,.405,1,1,.4,rig);
+ellipsoid(.13,gold,0,2.35,.36,.7,.75,.3,rig);ellipsoid(.055 ,explorerCream,0,2.35,.405,1,1,.4,rig);
 // articulated arms with shoulder caps, sleeves, cuffs and hands
 const armL=new THREE.Group(),armR=new THREE.Group();armL.position.set(-.39,1.43,0);armR.position.set(.39,1.43,0);rig.add(armL,armR);
-for(const [arm,side] of [[armL,-1],[armR,1]]){ellipsoid(.2,jacketLight,0,-.08,0,1,.95,1,arm);capsule(.145,.36,jacket,0,-.34,0,arm);capsule(.12,.12,cream,0,-.57,.015,arm);ellipsoid(.125,skin,0,-.7,.04,1,.95,.9,arm);ellipsoid(.055,skinShade,0,-.78,.11,1,1,.7,arm)}
+for(const [arm,side] of [[armL,-1],[armR,1]]){ellipsoid(.2,jacketLight,0,-.08,0,1,.95,1,arm);capsule(.145,.36,jacket,0,-.34,0,arm);capsule(.12,.12 ,explorerCream,0,-.57,.015,arm);ellipsoid(.125,skin,0,-.7,.04,1,.95,.9,arm);ellipsoid(.055,skinShade,0,-.78,.11,1,1,.7,arm)}
 // shoulder piping, chest compass and a little side satchel
 ellipsoid(.07,gold,-.34,1.42,.15,1,.65,.55,rig);ellipsoid(.07,gold,.34,1.42,.15,1,.65,.55,rig);
 ellipsoid(.09,gold,.22,1.27,.31,1,1,.35,rig);ellipsoid(.045,redDark,.22,1.27,.345,1,1,.3,rig);
 box(.25,.26,.16,leatherLight,-.48,.91,.05,rig);box(.16,.08,.08,gold,-.48,.91,.145,rig);
 player.position.set(0,0,12);
 // companion creature custom stylized fox
-const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22,cream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38,cream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
+const buddy=new THREE.Group();scene.add(buddy);const orange=mat(0xe98942),cream=mat(0xffe2ad),brown=mat(0x70452f);ball(.48,orange,0,.52,0,buddy,1.15,.85,.9);ball(.31,orange,0,1.03,.18,buddy,.9,1,.9);ball(.22 ,explorerCream,0,.91,.4,buddy,1,.6,.5);ball(.18,orange,-.23,1.27,.12,buddy,.55,1,.5);ball(.18,orange,.23,1.27,.12,buddy,.55,1,.5);ball(.08,black,0,1.03,.58,buddy,1,1,.5);ball(.38 ,explorerCream,0,.35,-.5,buddy,.6,.7,1.5);buddy.position.set(-1,0,14);
 // wild little creatures visible in meadow
 function wild(x,z,color,accent,name,emoji){
 const g=new THREE.Group();scene.add(g);const cm=mat(color),am=mat(accent),shine=mat(0xfff4d8),dark=mat(0x263039);
