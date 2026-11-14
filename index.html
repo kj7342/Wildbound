@@ -13,6 +13,18 @@
 <div id="hint">Explore the meadow · Find your first wild friend</div><div id="toast"></div>
 <div id="bottom"><div id="stick"><div id="nub"></div></div><div id="actions"><button class="act" id="jump">↟<small>JUMP</small></button><button class="act" id="interact">✧<small>INTERACT</small></button></div></div>
 <script type="module">
+const gameRoot=document.querySelector('#game');
+const startup=document.createElement('div');
+startup.id='startup-debug';
+startup.style.cssText='position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:5;max-width:88%;padding:14px 18px;border-radius:14px;background:#102b26ed;border:1px solid #ffffff55;color:#fff3d6;font:14px system-ui;text-align:center';
+startup.textContent='Loading the 3D world…';
+gameRoot.appendChild(startup);
+function showStartupError(message){
+  startup.style.display='block';
+  startup.textContent='Wildbound could not start the 3D world: '+String(message).slice(0,240)+' · Please send this message to ChatGPT.';
+}
+window.addEventListener('error',e=>showStartupError(e.message||'Unknown JavaScript error'));
+window.addEventListener('unhandledrejection',e=>showStartupError(e.reason?.message||e.reason||'Module loading error'));
 let THREE;
 try {
   THREE = await import('https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js');
@@ -25,7 +37,7 @@ try {
   }
 }
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bd5dc);scene.fog=new THREE.Fog(0x9bd5dc,65,175);
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;root.appendChild(renderer.domElement);startup.remove();
 scene.add(new THREE.HemisphereLight(0xe7f8ff,0x59764b,2.0));const sun=new THREE.DirectionalLight(0xffedc4,2.6);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);sun.shadow.camera.left=-65;sun.shadow.camera.right=65;sun.shadow.camera.top=65;sun.shadow.camera.bottom=-65;scene.add(sun);
 const mat=(c,r=.9)=>new THREE.MeshStandardMaterial({color:c,roughness:r});const grass=mat(0x68a94d),pathmat=mat(0xc9a875),darkgrass=mat(0x4b873f),wood=mat(0x815338),leafM=[mat(0x367f4d),mat(0x4c9954),mat(0x70ae59)],stone=mat(0x87928a),water= new THREE.MeshStandardMaterial({color:0x4caec1,roughness:.23,metalness:.12});
 function box(w,h,d,m,x,y,z,group=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;group.add(o);return o}
